@@ -1,7 +1,9 @@
 package tr.edu.alparslan.havadrumu;
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
+import android.os.Debug;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -9,6 +11,11 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.GlideBuilder;
+import com.bumptech.glide.load.model.GlideUrl;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -25,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
     private Button button;
     private EditText editText;
     private ImageView imageView;
+    ImageView imageView2;
     String sehir;
 
 
@@ -41,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
         button=(Button)findViewById(R.id.button);
         editText=(EditText)findViewById(R.id.editText);
         imageView=(ImageView)findViewById(R.id.imageView);
+        imageView2=(ImageView)findViewById(R.id.imageView2);
 
 
         button.setOnClickListener(new View.OnClickListener() {
@@ -50,10 +59,9 @@ public class MainActivity extends AppCompatActivity {
                 JsonParse jsonParse = new JsonParse();
                 sehir = String.valueOf(editText.getText());
                 new JsonParse().execute();
-
-
             }
         });
+
     }
 
     protected class JsonParse extends AsyncTask<Void, Void, Void> {
@@ -64,6 +72,7 @@ public class MainActivity extends AppCompatActivity {
         int result_temp;
         String result_city;
         Bitmap bitImage;
+
 
         @Override
         protected Void doInBackground(Void... params) {
@@ -96,6 +105,7 @@ public class MainActivity extends AppCompatActivity {
 
                 bitImage = BitmapFactory.decodeStream(icon_url.openConnection().getInputStream());
 
+
             } catch (IOException e) {
                 e.printStackTrace();
             } catch (JSONException e) {
@@ -112,6 +122,32 @@ public class MainActivity extends AppCompatActivity {
             txt_sehir.setText(result_city);
             txt_aciklama.setText(result_description);
             imageView.setImageBitmap(bitImage);
+            if (result_main.equals("Clear")) {
+                Glide.with(MainActivity.this)
+                        .load("https://st3.depositphotos.com/1162190/14632/i/1600/depositphotos_146328963-stock-photo-blue-sea-and-sky-white.jpg")
+                        .into(imageView2);
+            } if (result_main.equals("Clouds")) {
+                Glide.with(MainActivity.this)
+                        .load("https://www.cybernewspr.com/web/images/media/2018-01B/NUBOSIDAD-ARCHIVO-1.jpg")
+                        .into(imageView2);
+
+            }  if (result_main.equals("rainy")) {
+                Glide.with(MainActivity.this)
+                        .load("https://images.pexels.com/photos/68357/pexels-photo-68357.jpeg?cs=srgb&dl=rain-rain-on-window-raindrops-68357.jpg&fm=jpg")
+                        .into(imageView2);
+            }  if (result_main.equals("Partly clouds")) {
+                Glide.with(MainActivity.this)
+                        .load("https://upload.wikimedia.org/wikipedia/commons/0/00/Flickr_-_Nicholas_T_-_Partly_Cloudy.jpg")
+                        .into(imageView2);
+            }  if (result_main.equals("Dust")) {
+                Glide.with(MainActivity.this)
+                        .load("https://images.pexels.com/photos/45222/forest-fog-nature-winter-45222.jpeg?cs=srgb&dl=cloudy-fog-foggy-45222.jpg&fm=jpg")
+                        .into(imageView2);
+
+            }
+
+
+
             super.onPostExecute(aVoid);
 
             //tek tek gerekli olan kısımlara yerleştirdik aldığımız verileri
@@ -122,3 +158,4 @@ public class MainActivity extends AppCompatActivity {
 
 
 }
+
